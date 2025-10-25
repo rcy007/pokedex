@@ -1,7 +1,7 @@
 // import type { CLICommand } from "./command.js";
 import { State } from "./state.js";
 
-export function commandHelp(input: State){
+export async function commandHelp(input: State): Promise<void>{
     console.log(`Welcome to the Pokedex!\nUsage:\n`);
 
     for(const key in input.commands){

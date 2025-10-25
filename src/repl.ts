@@ -2,6 +2,8 @@
 import { CLICommand, State } from "./state.js";
 import { commandExit } from "./command_exit.js";
 import { commandHelp } from "./command_help.js";
+import { commandMap } from "./command_map.js";
+import { commandMapb } from "./command_mapb.js";
 // import { initState } from "./state.js";
 
 
@@ -16,30 +18,51 @@ export function getCommands(): Record<string, CLICommand>{
             name: 'exit',
             description: "Exit the Pokedex",
             callback: commandExit
+        },
+        map: {
+            name: 'map',
+            description: "Displays the frist/next location areas.",
+            callback: commandMap
+        },
+        mapb: {
+            name: 'mapb',
+            description: "Displays the pervious page of location areas.",
+            callback: commandMapb
         }
     }
 }
+
+function isCLICommand(value: unknown): value is CLICommand {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    typeof (value as CLICommand).callback === "function"
+  );
+}
+
 
 export function startREPL(state: State) {
     const cd = state['commands'];
     const rl = state['repl'];
     rl.prompt();
-    rl.on("line", (input) => {
+    rl.on("line", async (input) => {
         if (input.trim() === "") {
             rl.prompt();
         } else {
-            if (input in cd){
+            const command = cd[input];
+            if (!isCLICommand(command)){
+                console.log("Unknown command");
+                rl.prompt();
+            }
+            else{
                 try{
-                    cd[input].callback(state);
+                    await command.callback(state);
                     rl.prompt();
                 }
                 catch(e){
                     console.log(e);
                     rl.prompt();
                 }
-            } else{
-                console.log("Unknown command");
-                rl.prompt();
             }
         }
     });
