@@ -71,6 +71,7 @@ export async function commandCatch(state, argument) {
                     const subset = pick(final, pokemonKeys);
                     state.dex[pokemon] = subset;
                     console.log(`${final.name} was caught!`);
+                    console.log("You may now inspect it with the inspect command.");
                 }
             }
             else {
@@ -100,7 +101,21 @@ export async function commandInspect(state, argument) {
     else {
         console.log(`you have not caught that pokemon`);
     }
-    // for (const key in state.dex) {
-    //     console.log(`${input.commands[key]['name']}: ${input.commands[key]['description']}`);
-    // }
+}
+export async function commandPokedex(state) {
+    try {
+        const pokedex = state.dex;
+        if (Object.keys(pokedex).length === 0) {
+            console.log(`Sorry, you havn't caught any pokemons yet.`);
+        }
+        else {
+            console.log(`Your Pokedex:`);
+            for (const key in pokedex) {
+                console.log(` - ${key}`);
+            }
+        }
+    }
+    catch (e) {
+        console.log(`Error fetching Pokedex: ${e}`);
+    }
 }

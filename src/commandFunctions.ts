@@ -84,6 +84,7 @@ export async function commandCatch(state: State, argument: string): Promise<void
                     const subset = pick(final as Pokemon, pokemonKeys);
                     state.dex[pokemon] = subset as Pokemon;
                     console.log(`${final.name} was caught!`);
+                    console.log("You may now inspect it with the inspect command.");
                 }
             } else{
                 console.log(`${final.name} escaped!`);
@@ -110,7 +111,20 @@ export async function commandInspect(state: State, argument: string): Promise<vo
     } else {
         console.log(`you have not caught that pokemon`);
     }
-    // for (const key in state.dex) {
-    //     console.log(`${input.commands[key]['name']}: ${input.commands[key]['description']}`);
-    // }
+}
+
+export async function commandPokedex(state: State): Promise<void> {
+    try{
+    const pokedex = state.dex;
+    if(Object.keys(pokedex).length === 0){
+        console.log(`Sorry, you havn't caught any pokemons yet.`);
+    } else{
+        console.log(`Your Pokedex:`);
+        for (const key in pokedex) {
+        console.log(` - ${key}`);
+    }
+    }
+    } catch(e){
+        console.log(`Error fetching Pokedex: ${e}`);
+    }
 }

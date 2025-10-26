@@ -46,5 +46,10 @@ export function getCommands(): Record<string, CLICommand>{
             description: 'Inspect details of a cached pokemon.',
             callback: commands.commandInspect
         },
+        pokedex: {
+            name: 'pokedex',
+            description: 'List all the pokemons you caught.',
+            callback: commands.commandPokedex
+        }
     }
 }
