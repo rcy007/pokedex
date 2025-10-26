@@ -9,9 +9,9 @@ export class PokeAPI {
         this.locy = apiName;
         this.cache = cache;
     }
-    async fetchLocations(caller, areaName) {
+    async fetchLocations(caller, argument) {
         const pageURL = this.baseURL + this.locy;
-        const areaURL = pageURL + areaName;
+        const newURL = pageURL + argument;
         let res;
         if (caller === "map") {
             if (this.next === null) {
@@ -32,7 +32,7 @@ export class PokeAPI {
             return res;
         }
         if (caller === "explore") {
-            res = await this.fetchLocation(areaURL);
+            res = await this.fetchLocation(newURL);
             return res;
         }
         return {};

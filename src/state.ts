@@ -1,5 +1,5 @@
 import { createInterface, type Interface } from "readline";
-import { getCommands } from "./repl.js";
+import { getCommands } from "./commandDirectory.js";
 import { PokeAPI } from "./pokeapi.js";
 import { Cache } from "./pokecache.js";
 import { type Location } from "./pokeapi.js";

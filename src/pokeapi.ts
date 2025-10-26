@@ -34,9 +34,9 @@ export class PokeAPI {
     this.cache = cache;
   }
 
-  async fetchLocations(caller: string, areaName?: string): Promise<ShallowLocations> {
+  async fetchLocations(caller: string, argument?: string): Promise<ShallowLocations> {
     const pageURL = this.baseURL + this.locy;
-    const areaURL = pageURL + areaName;
+    const newURL = pageURL + argument;
     let res: Location;
 
     if (caller === "map") {
@@ -59,7 +59,7 @@ export class PokeAPI {
     }
 
     if(caller === "explore") {
-      res = await this.fetchLocation(areaURL);
+      res = await this.fetchLocation(newURL);
       return res;
     }
 
