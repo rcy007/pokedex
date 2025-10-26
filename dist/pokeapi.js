@@ -3,19 +3,19 @@ export class PokeAPI {
     offset = 0;
     prev = null;
     next = null;
-    locy;
     cache;
-    constructor(apiName, cache) {
-        this.locy = apiName;
+    pageURL;
+    constructor(cache) {
         this.cache = cache;
     }
     async fetchLocations(caller, argument) {
-        const pageURL = this.baseURL + this.locy;
-        const newURL = pageURL + argument;
+        // const pageURL = this.baseURL + this.locy;
+        // const newURL = pageURL + argument;
         let res;
         if (caller === "map") {
+            this.pageURL = this.baseURL + '/location-area/';
             if (this.next === null) {
-                res = await this.fetchLocation(pageURL);
+                res = await this.fetchLocation(this.pageURL);
             }
             else {
                 res = await this.fetchLocation(this.next);
@@ -32,7 +32,8 @@ export class PokeAPI {
             return res;
         }
         if (caller === "explore") {
-            res = await this.fetchLocation(newURL);
+            this.pageURL = this.baseURL + '/location-area/' + argument;
+            res = await this.fetchLocation(this.pageURL);
             return res;
         }
         return {};

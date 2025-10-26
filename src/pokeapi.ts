@@ -22,26 +22,26 @@ export type Result = {
 }
 
 export class PokeAPI {
-  public baseURL = "https://pokeapi.co/api/v2";
+  public readonly baseURL = "https://pokeapi.co/api/v2";
   public offset: number = 0;
   public prev: string | null = null;
   public next: string | null = null;
-  private locy: string;
   public cache: Cache<Location>;
+  public pageURL: string | undefined;
 
-  constructor(apiName: string, cache: Cache<Location>) {
-    this.locy = apiName;
+  constructor(cache: Cache<Location>) {
     this.cache = cache;
   }
 
   async fetchLocations(caller: string, argument?: string): Promise<ShallowLocations> {
-    const pageURL = this.baseURL + this.locy;
-    const newURL = pageURL + argument;
+    // const pageURL = this.baseURL + this.locy;
+    // const newURL = pageURL + argument;
     let res: Location;
 
     if (caller === "map") {
+      this.pageURL = this.baseURL + '/location-area/';
       if (this.next === null) {
-        res = await this.fetchLocation(pageURL);
+        res = await this.fetchLocation(this.pageURL);
       } else {
         res = await this.fetchLocation(this.next);
       }
@@ -59,7 +59,8 @@ export class PokeAPI {
     }
 
     if(caller === "explore") {
-      res = await this.fetchLocation(newURL);
+      this.pageURL = this.baseURL + '/location-area/' + argument;
+      res = await this.fetchLocation(this.pageURL);
       return res;
     }
 

@@ -2,6 +2,7 @@ import { createInterface } from "readline";
 import { getCommands } from "./commandDirectory.js";
 import { PokeAPI } from "./pokeapi.js";
 import { Cache } from "./pokecache.js";
+// /location-area/
 export function initState() {
     const rl = createInterface({
         input: process.stdin,
@@ -10,6 +11,6 @@ export function initState() {
     });
     const cd = getCommands();
     const cache = new Cache(30000);
-    const api = new PokeAPI("/location-area/", cache);
+    const api = new PokeAPI(cache);
     return { repl: rl, commands: cd, api: api };
 }

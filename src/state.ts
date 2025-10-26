@@ -11,7 +11,7 @@ export type State = {
     api: PokeAPI;
 };
 
-
+// /location-area/
 export function initState(): State{
     const rl = createInterface({
         input: process.stdin,
@@ -20,6 +20,6 @@ export function initState(): State{
     });
     const cd = getCommands();
     const cache = new Cache(30000);
-    const api = new PokeAPI("/location-area/", cache as Cache<Location>);
+    const api = new PokeAPI(cache as Cache<Location>);
     return {repl: rl, commands: cd, api: api};
 }

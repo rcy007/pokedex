@@ -14,7 +14,7 @@ export function getCommands(): Record<string, CLICommand>{
         help: {
             name: 'help',
             description: 'Displays a help message.',
-            callback: commands.commandHelp
+            callback: commands.commandHelp,
         },
         exit: {
             name: 'exit',
