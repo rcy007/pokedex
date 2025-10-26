@@ -1,5 +1,12 @@
 import * as commands from "./commandFunctions.js";
-import { CLICommand } from "./state.js";
+import { State }  from "./state.js";
+
+
+export type CLICommand = {
+    name: string;
+    description: string;
+    callback: (state: State, ...args: string[]) => Promise<void>;
+}
 
 
 export function getCommands(): Record<string, CLICommand>{

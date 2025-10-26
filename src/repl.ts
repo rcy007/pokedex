@@ -1,5 +1,5 @@
-import { CLICommand, State } from "./state.js";
-
+import { State } from "./state.js";
+import { type CLICommand } from "./commandDirectory.js";
 
 function isCLICommand(value: unknown): value is CLICommand {
   return (

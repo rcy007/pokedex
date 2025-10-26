@@ -3,6 +3,7 @@ import { getCommands } from "./commandDirectory.js";
 import { PokeAPI } from "./pokeapi.js";
 import { Cache } from "./pokecache.js";
 import { type Location } from "./pokeapi.js";
+import { type CLICommand } from "./commandDirectory.js";
 
 export type State = {
     repl: Interface;
@@ -10,11 +11,6 @@ export type State = {
     api: PokeAPI;
 };
 
-export type CLICommand = {
-    name: string;
-    description: string;
-    callback: (state: State, ...args: string[]) => Promise<void>;
-}
 
 export function initState(): State{
     const rl = createInterface({
