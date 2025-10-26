@@ -36,6 +36,11 @@ export class PokeAPI {
             res = await this.fetchLocation(this.pageURL);
             return res;
         }
+        if (caller === "catch") {
+            this.pageURL = this.baseURL + '/pokemon/' + argument;
+            res = await this.fetchLocation(this.pageURL);
+            return res;
+        }
         return {};
     }
     async fetchLocation(locationName) {

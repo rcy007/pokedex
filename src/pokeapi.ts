@@ -4,6 +4,15 @@ export type ShallowLocations = Partial<Location>
 
 //  | { pokemon_encounters: {'pokemon': {'name': string}}[] };
 
+export type Pokemon = {
+  name: string,
+  height: number,
+  weight: number,
+  stats: any,
+  // stats: Record<string, number | Record<string, string>> [],
+  types: Record<string, Record<string,string>>[]
+}
+
 export type PokemonEncounter = {
   pokemon: { name: string };
 };
@@ -13,7 +22,12 @@ export type Location =  {
   next: string,
   previous: any,
   results: Result[],
-  pokemon_encounters?: PokemonEncounter[]
+  // explore - pokemons in location area types
+  pokemon_encounters?: PokemonEncounter[],
+  // Pokemon type info
+  name?: string,
+  base_experience?: number
+
 }
 
 export type Result = {
@@ -60,6 +74,12 @@ export class PokeAPI {
 
     if(caller === "explore") {
       this.pageURL = this.baseURL + '/location-area/' + argument;
+      res = await this.fetchLocation(this.pageURL);
+      return res;
+    }
+
+    if(caller === "catch") {
+      this.pageURL = this.baseURL + '/pokemon/' + argument;
       res = await this.fetchLocation(this.pageURL);
       return res;
     }

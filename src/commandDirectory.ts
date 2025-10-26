@@ -40,6 +40,11 @@ export function getCommands(): Record<string, CLICommand>{
             name: 'catch',
             description: 'Try to catch a pokemon.',
             callback: commands.commandCatch
-        }
+        },
+        inspect: {
+            name: 'inspect',
+            description: 'Inspect details of a cached pokemon.',
+            callback: commands.commandInspect
+        },
     }
 }

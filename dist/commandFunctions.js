@@ -50,18 +50,57 @@ export async function commandExplore(state, argument) {
         console.log("API Error!!");
     }
 }
+function getRandomIntInclusive(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+    // The maximum is inclusive and the minimum is inclusive
+}
 export async function commandCatch(state, argument) {
     try {
-        const final = await state.api.fetchLocations("explore", argument);
-        if ("pokemon_encounters" in final && Array.isArray(final.pokemon_encounters)) {
-            const locations = final.pokemon_encounters.map((item) => item.pokemon.name);
-            locations.forEach((item) => console.log(item));
+        const final = await state.api.fetchLocations("catch", argument);
+        if (["name", "base_experience"].every(x => x in final)) {
+            console.log(`Throwing a Pokeball at ${argument}...`);
+            const proby = getRandomIntInclusive(0, final.base_experience);
+            if (proby >= final.base_experience / 2) {
+                // Adding to pokedex
+                const pokemon = final.name;
+                if (pokemon) {
+                    const pokemonKeys = ["name", "height", "weight", "stats", "types"];
+                    const pick = (obj, keys) => keys.reduce((acc, key) => (key in obj ? { ...acc, [key]: obj[key] } : acc), {});
+                    const subset = pick(final, pokemonKeys);
+                    state.dex[pokemon] = subset;
+                    console.log(`${final.name} was caught!`);
+                }
+            }
+            else {
+                console.log(`${final.name} escaped!`);
+            }
         }
         else {
-            console.log("API Error!!");
+            console.log("No such pokemon!!");
         }
     }
     catch {
         console.log("API Error!!");
     }
+}
+export async function commandInspect(state, argument) {
+    const pokeDetails = state.dex[argument];
+    if (pokeDetails) {
+        console.log(`Name: ${pokeDetails.name}`);
+        console.log(`Height: ${pokeDetails.height}`);
+        console.log(`Weight: ${pokeDetails.weight}`);
+        console.log(`Stats: `);
+        pokeDetails.stats.forEach((value) => console.log(`-${value['stat']['name']}: ${value.base_stat}`));
+        console.log(`Types: `);
+        pokeDetails.types.forEach((value) => console.log(`- ${value['type']['name']}`));
+        // console.log(pokeDetails);
+    }
+    else {
+        console.log(`you have not caught that pokemon`);
+    }
+    // for (const key in state.dex) {
+    //     console.log(`${input.commands[key]['name']}: ${input.commands[key]['description']}`);
+    // }
 }

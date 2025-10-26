@@ -12,5 +12,6 @@ export function initState() {
     const cd = getCommands();
     const cache = new Cache(30000);
     const api = new PokeAPI(cache);
-    return { repl: rl, commands: cd, api: api };
+    const dex = {};
+    return { repl: rl, commands: cd, api: api, dex: dex };
 }
