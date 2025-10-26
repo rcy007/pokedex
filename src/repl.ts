@@ -1,11 +1,6 @@
-// import { createInterface } from "node:readline";
 import { CLICommand, State } from "./state.js";
-import { commandExit } from "./command_exit.js";
-import { commandHelp } from "./command_help.js";
-import { commandMap } from "./command_map.js";
-import { commandMapb } from "./command_mapb.js";
-import { commandExplore } from "./command_explore.js";
-// import { initState } from "./state.js";
+
+import * as commands from "./commands.js";
 
 
 export function getCommands(): Record<string, CLICommand>{
@@ -13,27 +8,32 @@ export function getCommands(): Record<string, CLICommand>{
         help: {
             name: 'help',
             description: 'Displays a help message.',
-            callback: commandHelp
+            callback: commands.commandHelp
         },
         exit: {
             name: 'exit',
             description: "Exit the Pokedex.",
-            callback: commandExit
+            callback: commands.commandExit
         },
         map: {
             name: 'map',
             description: "Displays the frist/next location areas.",
-            callback: commandMap
+            callback: commands.commandMap
         },
         mapb: {
             name: 'mapb',
             description: "Displays the pervious page of location areas.",
-            callback: commandMapb
+            callback: commands.commandMapb
         },
         explore: {
             name: 'explore',
             description: 'Finds all pokemons in the given location area.',
-            callback: commandExplore
+            callback: commands.commandExplore
+        },
+        catch: {
+            name: 'catch',
+            description: 'Finds all pokemons in the given location area.',
+            callback: commands.commandCatch
         }
     }
 }
