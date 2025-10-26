@@ -1,12 +1,19 @@
 import { Cache } from "./pokecache.js";
 
-export type ShallowLocations = Partial<Location>;
+export type ShallowLocations = Partial<Location>
+
+//  | { pokemon_encounters: {'pokemon': {'name': string}}[] };
+
+export type PokemonEncounter = {
+  pokemon: { name: string };
+};
 
 export type Location =  {
   count: number,
   next: string,
   previous: any,
-  results: Result[]
+  results: Result[],
+  pokemon_encounters?: PokemonEncounter[]
 }
 
 export type Result = {
@@ -20,14 +27,16 @@ export class PokeAPI {
   public prev: string | null = null;
   public next: string | null = null;
   private locy: string;
-  public cache = new Cache<Location>(5000);
+  public cache: Cache<Location>;
 
-  constructor(apiName: string) {
+  constructor(apiName: string, cache: Cache<Location>) {
     this.locy = apiName;
+    this.cache = cache;
   }
 
-  async fetchLocations(caller: string): Promise<ShallowLocations> {
+  async fetchLocations(caller: string, areaName?: string): Promise<ShallowLocations> {
     const pageURL = this.baseURL + this.locy;
+    const areaURL = pageURL + areaName;
     let res: Location;
 
     if (caller === "map") {
@@ -39,13 +48,23 @@ export class PokeAPI {
       this.next = res.next;
       this.prev = res.previous;
       return res;
-    } else {
+    } 
+
+    if(caller === "mapb") {
       // Case for if(caller === "mapb") , Convert to else if, if more commands are added
       res = await this.fetchLocation(this.prev as string);
       this.next = res.next;
       this.prev = res.previous;
       return res;
     }
+
+    if(caller === "explore") {
+      res = await this.fetchLocation(areaURL);
+      return res;
+    }
+
+    return {};
+
   }
 
   async fetchLocation(locationName: string): Promise<Location> {

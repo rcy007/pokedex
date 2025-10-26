@@ -2,17 +2,18 @@ import { commandExit } from "./command_exit.js";
 import { commandHelp } from "./command_help.js";
 import { commandMap } from "./command_map.js";
 import { commandMapb } from "./command_mapb.js";
+import { commandExplore } from "./command_explore.js";
 // import { initState } from "./state.js";
 export function getCommands() {
     return {
         help: {
             name: 'help',
-            description: 'Displays a help message',
+            description: 'Displays a help message.',
             callback: commandHelp
         },
         exit: {
             name: 'exit',
-            description: "Exit the Pokedex",
+            description: "Exit the Pokedex.",
             callback: commandExit
         },
         map: {
@@ -24,6 +25,11 @@ export function getCommands() {
             name: 'mapb',
             description: "Displays the pervious page of location areas.",
             callback: commandMapb
+        },
+        explore: {
+            name: 'explore',
+            description: 'Finds all pokemons in the given location area.',
+            callback: commandExplore
         }
     };
 }
@@ -41,14 +47,20 @@ export function startREPL(state) {
             rl.prompt();
         }
         else {
-            const command = cd[input];
+            const [cmd, argument] = input.split(" ");
+            const command = cd[cmd];
             if (!isCLICommand(command)) {
                 console.log("Unknown command");
                 rl.prompt();
             }
             else {
                 try {
-                    await command.callback(state);
+                    if (argument) {
+                        await command.callback(state, argument);
+                    }
+                    else {
+                        await command.callback(state);
+                    }
                     rl.prompt();
                 }
                 catch (e) {

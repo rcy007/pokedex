@@ -1,16 +1,17 @@
-import { Cache } from "./pokecache.js";
 export class PokeAPI {
     baseURL = "https://pokeapi.co/api/v2";
     offset = 0;
     prev = null;
     next = null;
     locy;
-    cache = new Cache(5000);
-    constructor(apiName) {
+    cache;
+    constructor(apiName, cache) {
         this.locy = apiName;
+        this.cache = cache;
     }
-    async fetchLocations(caller) {
+    async fetchLocations(caller, areaName) {
         const pageURL = this.baseURL + this.locy;
+        const areaURL = pageURL + areaName;
         let res;
         if (caller === "map") {
             if (this.next === null) {
@@ -23,13 +24,18 @@ export class PokeAPI {
             this.prev = res.previous;
             return res;
         }
-        else {
+        if (caller === "mapb") {
             // Case for if(caller === "mapb") , Convert to else if, if more commands are added
             res = await this.fetchLocation(this.prev);
             this.next = res.next;
             this.prev = res.previous;
             return res;
         }
+        if (caller === "explore") {
+            res = await this.fetchLocation(areaURL);
+            return res;
+        }
+        return {};
     }
     async fetchLocation(locationName) {
         const cached = this.cache.get(locationName);

@@ -1,6 +1,7 @@
 import { createInterface } from "readline";
 import { getCommands } from "./repl.js";
 import { PokeAPI } from "./pokeapi.js";
+import { Cache } from "./pokecache.js";
 export function initState() {
     const rl = createInterface({
         input: process.stdin,
@@ -8,6 +9,7 @@ export function initState() {
         prompt: "Pokedex > "
     });
     const cd = getCommands();
-    const api = new PokeAPI("/location-area/");
+    const cache = new Cache(30000);
+    const api = new PokeAPI("/location-area/", cache);
     return { repl: rl, commands: cd, api: api };
 }
