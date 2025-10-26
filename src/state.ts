@@ -1,6 +1,7 @@
 import { createInterface, type Interface } from "readline";
 import { getCommands } from "./repl.js";
 import { PokeAPI } from "./pokeapi.js";
+import { Cache } from "./pokecache.js";
 
 export type State = {
     repl: Interface;
